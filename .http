@@ -1,0 +1,29 @@
+POST http://localhost:5001/api/group/student HTTP/1.1
+content-type: application/json
+
+{
+    "groupId": "67a910af3fd50c82fd69e244",
+    "studentId": "67a47af26df9090b59f62b71"
+}
+
+# {
+#     "photoUrl": "",
+#     "_id": "679baaffd59955b81c4e1ab3"
+# }
+
+# {
+#   "adminId": "679b87bf1af3cf9246eceb10",
+#   "token": "999223234",
+#   "dateRegistration": "2025-01-30T14:36:21.393Z",
+#   "_id": "679b8e7058d8a51fc306ee38"
+# }
+
+# {
+#   "username": "nikolas",
+#   "userId": "999223",
+#   "photoUrl": "",
+#   "lastActiveSession": "2025-01-30T16:37:26.051Z",
+#   "dateRegistration": "2025-01-30T16:37:26.051Z",
+#   "_id": "679baaffd59955b81c4e1ab3",
+#   "__v": 0
+# }
