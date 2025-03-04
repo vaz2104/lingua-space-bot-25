@@ -16,7 +16,7 @@ class AdminService {
       throw new Error("Invalid data was sent"); // 400
     }
 
-    const admin = await Admin.find({
+    const admin = await PlatformUser.find({
       userId: id,
     });
 
@@ -27,7 +27,7 @@ class AdminService {
       throw new Error("Invalid data was sent"); // 400
     }
 
-    const admin = await Admin.findById(id);
+    const admin = await PlatformUser.findById(id);
 
     return admin;
   }
@@ -39,7 +39,7 @@ class AdminService {
 
     options.lastActiveSession = dateUkrainTZ;
 
-    const admin = await Admin.findByIdAndUpdate(_id, options, {
+    const admin = await PlatformUser.findByIdAndUpdate(_id, options, {
       new: true,
     });
 

@@ -7,6 +7,17 @@ query queryTextsByBotID($botID:[String], $offset: Int, $size: Int) {
       title(format: RENDERED)
       slug
       databaseId
+      levels {
+        nodes {
+          slug
+          name
+        }
+      }
+      RulesData {
+        rulesData {
+          content
+        }
+      }
     }
   }
 }

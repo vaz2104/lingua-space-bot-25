@@ -4,6 +4,12 @@ query queryWordSetBySlug($slug: ID!) {
     databaseId
     slug
     title(format: RENDERED)
+    levels {
+      nodes {
+        slug
+        name
+      }
+    }
     wordSetOptions {
       wordSetOptions {
         image {

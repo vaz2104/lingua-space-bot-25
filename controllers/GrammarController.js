@@ -20,7 +20,7 @@ class GrammarController {
 
   async getBySlug(req, res) {
     try {
-      console.log(req?.params?.slug);
+      // console.log(req?.params?.slug);
 
       const data = await GrammarService.getOneBySlug(req?.params?.slug);
       res.json(data);
@@ -30,10 +30,7 @@ class GrammarController {
   }
   async getByBotID(req, res) {
     try {
-      const data = await GrammarService.getByBotID(
-        req?.params?.id,
-        req?.query?.page
-      );
+      const data = await GrammarService.getByBotID(req?.params?.id, req?.query);
       res.json(data);
     } catch (error) {
       res.status(500).json(error.message);

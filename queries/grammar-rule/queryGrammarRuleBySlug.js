@@ -4,6 +4,12 @@ query queryGrammarRuleBySlug($slug: ID!) {
     databaseId
     title(format: RENDERED)
     slug
+          levels {
+        nodes {
+          slug
+          name
+        }
+      }
     RulesData {
       rulesData {
         sentences {

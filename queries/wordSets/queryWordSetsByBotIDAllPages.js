@@ -1,7 +1,8 @@
 module.exports = `
-query queryWordSetsByBotID($botID:[String], $offset: Int, $size: Int) {
+query queryWordSetsByBotID($botID:[String]) {
   wordSets(
-    where: {offsetPagination: {offset: $offset, size: $size}, taxQuery: {taxArray: {taxonomy: BOT, terms: $botID, operator: IN, field: SLUG}}}
+    where: {taxQuery: {taxArray: {taxonomy: BOT, terms: $botID, operator: IN, field: SLUG}}}
+    first: 20000
   ) {
     nodes {
       databaseId

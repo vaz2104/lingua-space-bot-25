@@ -1,8 +1,17 @@
 module.exports = `
-query queryPhrasebooksByBotID($botID:[String], $offset: Int, $size: Int) {
+query queryPhrasebooksByBotIDCursorSelector($botID:[String], $cursor: String, $size: Int) {
   sentenceSets(    
-  where: {offsetPagination: {offset: $offset, size: $size}, taxQuery: {taxArray: {taxonomy: BOT, terms: $botID, operator: IN, field: SLUG}}}
-) {
+  where: {taxQuery: {taxArray: {taxonomy: BOT, terms: $botID, operator: IN, field: SLUG}}}
+    after: $cursor
+    first: $size
+  ) {
+    pageInfo {
+      offsetPagination {
+        total
+        hasMore
+      }
+      endCursor
+    }
     nodes {
           levels {
         nodes {

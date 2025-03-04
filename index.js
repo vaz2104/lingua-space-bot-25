@@ -16,6 +16,7 @@ const grammarRouts = require("./routs/grammarRouts");
 const wordsetRouts = require("./routs/wordsetRouts");
 const phrasebooksRouts = require("./routs/phrasebooksRouts");
 const textRouts = require("./routs/textRouts");
+const taskRouts = require("./routs/taskRouts");
 
 const BotMethods = require("./lib/BotMethods");
 const PanelsInitialization = require("./lib/InitBotsPanel");
@@ -76,6 +77,7 @@ app.use("/api", grammarRouts);
 app.use("/api", wordsetRouts);
 app.use("/api", phrasebooksRouts);
 app.use("/api", textRouts);
+app.use("/api", taskRouts);
 
 app.listen(process.env.PORT, () => {
   console.log(`Main bot started and listening on port ${process.env.PORT}`);

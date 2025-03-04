@@ -5,7 +5,7 @@ const TelegramUserService = require("./TelegramUserService");
 
 class AuthService {
   async createKey(options) {
-    console.log(options);
+    // console.log(options);
 
     if (!options?.telegramUserId) {
       throw new Error("Invalid data was sent"); // 400

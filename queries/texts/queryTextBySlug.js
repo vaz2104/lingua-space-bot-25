@@ -15,6 +15,12 @@ query queryTextBySlug($slug: ID!) {
           }
         }
       }
+      levels {
+        nodes {
+          slug
+          name
+        }
+      }
   }
 }
   

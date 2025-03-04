@@ -4,6 +4,12 @@ query queryPhrasebooksBySlug($slug: String!) {
       title
       databaseId
      slug
+           levels {
+        nodes {
+          slug
+          name
+        }
+      }
       sentenceSetOptions {
         sentenceSetOptions {
           sentences {

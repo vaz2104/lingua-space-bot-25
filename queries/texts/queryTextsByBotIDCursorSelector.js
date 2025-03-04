@@ -1,8 +1,17 @@
 module.exports = `
-query queryTextsByBotID($botID:[String], $offset: Int, $size: Int)  {
+query queryTextsByBotIDCursorSelector($botID:[String], $cursor: String, $size: Int)  {
   texts(
-    where: {offsetPagination: {offset: $offset, size: $size}, taxQuery: {taxArray: {taxonomy: BOT, terms: $botID, operator: IN, field: SLUG}}}
+    where: {taxQuery: {taxArray: {taxonomy: BOT, terms: $botID, operator: IN, field: SLUG}}}
+      after: $cursor
+      first: $size
   ) {
+    pageInfo {
+      offsetPagination {
+        total
+        hasMore
+      }
+      endCursor
+    }
     nodes {
         levels {
           nodes {

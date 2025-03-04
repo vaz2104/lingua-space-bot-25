@@ -21,7 +21,7 @@ class PhrasebookController {
     try {
       const data = await PhrasebookService.getByBotID(
         req?.params?.id,
-        req?.query?.page
+        req?.query
       );
       res.json(data);
     } catch (error) {

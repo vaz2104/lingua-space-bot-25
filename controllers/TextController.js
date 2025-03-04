@@ -3,7 +3,7 @@ const TextService = require("../services/TextService");
 class TextController {
   async getBySlug(req, res) {
     try {
-      console.log(req?.params?.slug);
+      // console.log(req?.params?.slug);
 
       const data = await TextService.getOneBySlug(req?.params?.slug);
       res.json(data);
@@ -13,7 +13,15 @@ class TextController {
   }
   async getByBotID(req, res) {
     try {
-      const data = await TextService.getByBotID(req?.params?.id);
+      const data = await TextService.getByBotID(req?.params?.id, req?.query);
+      res.json(data);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
+  async getTotalSetsNumber(req, res) {
+    try {
+      const data = await TextService.getTotalSetsNumber(req?.params?.id);
       res.json(data);
     } catch (error) {
       res.status(500).json(error.message);

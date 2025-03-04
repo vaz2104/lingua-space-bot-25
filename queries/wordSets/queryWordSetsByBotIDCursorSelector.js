@@ -1,8 +1,17 @@
 module.exports = `
-query queryWordSetsByBotID($botID:[String], $offset: Int, $size: Int) {
+query queryWordSetsByBotIDCursorSelector($botID:[String], $cursor: String, $size: Int) {
   wordSets(
-    where: {offsetPagination: {offset: $offset, size: $size}, taxQuery: {taxArray: {taxonomy: BOT, terms: $botID, operator: IN, field: SLUG}}}
+    where: { taxQuery: {taxArray: {taxonomy: BOT, terms: $botID, operator: IN, field: SLUG}}}
+    after: $cursor
+    first: $size
   ) {
+    pageInfo {
+      offsetPagination {
+        total
+        hasMore
+      }
+      endCursor
+    }
     nodes {
       databaseId
       slug

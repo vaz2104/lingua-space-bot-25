@@ -13,7 +13,7 @@ class BotService {
     return bot;
   }
   async getAll(adminId) {
-    console.log(adminId);
+    // console.log(adminId);
 
     if (!adminId) {
       throw new Error("Invalid data was sent"); // 400
@@ -126,7 +126,7 @@ class BotService {
       botId: id,
     }).populate(["studentId"]);
 
-    console.log(students);
+    // console.log(students);
 
     return students;
   }
