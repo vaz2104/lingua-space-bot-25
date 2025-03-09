@@ -1,6 +1,6 @@
 module.exports = `
-query queryWordSetBySlug($id: ID!) {
-  wordSet(id: $id, idType: SLUG) {
+query queryWordSetByID($id: ID!) {
+  wordSet(id: $id, idType: DATABASE_ID) {
     databaseId
     slug
     title(format: RENDERED)

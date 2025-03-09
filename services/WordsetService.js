@@ -1,6 +1,8 @@
 const fetchGraphQL = require("../lib/fetchGraphQL");
 const queryTotalSetsNumber = require("../queries/wordSets/queryTotalSetsNumber");
 const queryWordSetBySlug = require("../queries/wordSets/queryWordSetBySlug");
+const queryWordSetByID = require("../queries/wordSets/queryWordSetByID");
+const queryWordSetNameByID = require("../queries/wordSets/queryWordSetNameByID");
 const queryWordSets = require("../queries/wordSets/queryWordSets");
 const queryWordSetsByBotID = require("../queries/wordSets/queryWordSetsByBotID");
 const queryWordSetsByBotIDAllPages = require("../queries/wordSets/queryWordSetsByBotIDAllPages");
@@ -12,14 +14,26 @@ class WordsetService {
 
     return data?.wordSets?.nodes || [];
   }
-  async getOneBySlug(slug) {
-    if (!slug) {
+  async getOneBySlug(id, idType) {
+    if (!id || !idType) {
       throw new Error("Invalid data was sent"); // 400
     }
 
-    const data = await fetchGraphQL(queryWordSetBySlug, { slug });
+    const data =
+      idType === "DATABASE_ID"
+        ? await fetchGraphQL(queryWordSetByID, { id })
+        : await fetchGraphQL(queryWordSetBySlug, { id });
 
     return data?.wordSet || [];
+  }
+  async getNameByID(id) {
+    if (!id) {
+      throw new Error("Invalid data was sent"); // 400
+    }
+
+    const data = await fetchGraphQL(queryWordSetNameByID, { id });
+
+    return data?.wordSet?.title || [];
   }
   async getByBotID(id, query) {
     if (!id) {

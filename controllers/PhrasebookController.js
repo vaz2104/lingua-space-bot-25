@@ -9,14 +9,26 @@ class PhrasebookController {
       res.status(500).json(error.message);
     }
   }
-  async getBySlug(req, res) {
+  async getSingleBy(req, res) {
     try {
-      const data = await PhrasebookService.getOneBySlug(req?.params?.slug);
+      const data = await PhrasebookService.getSingleBy(
+        req?.params?.id,
+        req?.query?.idType
+      );
       res.json(data);
     } catch (error) {
       res.status(500).json(error.message);
     }
   }
+  async getNameByID(req, res) {
+    try {
+      const data = await PhrasebookService.getNameByID(req?.params?.id);
+      res.json(data);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
+
   async getByBotID(req, res) {
     try {
       const data = await PhrasebookService.getByBotID(

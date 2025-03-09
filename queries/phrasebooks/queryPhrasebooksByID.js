@@ -1,6 +1,6 @@
 module.exports = `
-query queryPhrasebooksBySlug($id: ID!) {
-  sentenceSet(id: $id, idType: SLUG) {
+query queryPhrasebooksByID($id: ID!) {
+  sentenceSet(id: $id, idType: DATABASE_ID) {
       title
       databaseId
      slug

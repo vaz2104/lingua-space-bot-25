@@ -1,28 +1,20 @@
 const GrammarService = require("../services/GrammarService");
 
 class GrammarController {
-  async getAll(req, res) {
+  async getGrammarNameByID(req, res) {
     try {
-      const data = await GrammarService.getAll();
-      res.json(data);
-    } catch (error) {
-      res.status(500).json(error.message);
-    }
-  }
-  async getOneBySlug(req, res) {
-    try {
-      const data = await GrammarService.getOneBySlug(req?.params?.slug);
+      const data = await GrammarService.getGrammarNameByID(req?.params?.id);
       res.json(data);
     } catch (error) {
       res.status(500).json(error.message);
     }
   }
 
-  async getBySlug(req, res) {
+  async getSingleBy(req, res) {
     try {
       // console.log(req?.params?.slug);
 
-      const data = await GrammarService.getOneBySlug(req?.params?.slug);
+      const data = await GrammarService.getSingleBy(req?.query);
       res.json(data);
     } catch (error) {
       res.status(500).json(error.message);

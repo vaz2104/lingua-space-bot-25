@@ -9,16 +9,26 @@ class WordsetController {
       res.status(500).json(error.message);
     }
   }
-  async getBySlug(req, res) {
+  async getSingleBy(req, res) {
     try {
-      // console.log(req?.params?.slug);
-
-      const data = await WordsetService.getOneBySlug(req?.params?.slug);
+      const data = await WordsetService.getOneBySlug(
+        req?.params?.id,
+        req?.query?.idType
+      );
       res.json(data);
     } catch (error) {
       res.status(500).json(error.message);
     }
   }
+  async getNameByID(req, res) {
+    try {
+      const data = await WordsetService.getNameByID(req?.params?.id);
+      res.json(data);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
+
   async getByBotID(req, res) {
     try {
       const data = await WordsetService.getByBotID(req?.params?.id, req?.query);

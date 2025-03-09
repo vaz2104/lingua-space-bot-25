@@ -31,6 +31,14 @@ class TaskController {
       res.status(500).json(error.message);
     }
   }
+  async getTaskByID(req, res) {
+    try {
+      const data = await TaskService.getTaskByID(req?.params?.id);
+      res.json(data);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
 }
 
 module.exports = new TaskController();

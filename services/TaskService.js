@@ -47,6 +47,18 @@ class TaskService {
       "students",
     ]);
   }
+
+  async getTaskByID(id) {
+    if (!id) {
+      throw new Error("Invalid data was sent"); // 400
+    }
+
+    return await StudentTaskRelationship.findById(id).populate([
+      "taskId",
+      "groupID",
+      "students",
+    ]);
+  }
 }
 
 module.exports = new TaskService();

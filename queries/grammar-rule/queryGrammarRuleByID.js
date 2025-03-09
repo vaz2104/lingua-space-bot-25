@@ -1,6 +1,6 @@
 module.exports = `
-query queryGrammarRuleBySlug($id: ID!) {
-    grammarRule(id: $id, idType: SLUG) {
+query queryGrammarRuleByID($id: ID!) {
+    grammarRule(id: $id, idType: DATABASE_ID) {
     databaseId
     title(format: RENDERED)
     slug

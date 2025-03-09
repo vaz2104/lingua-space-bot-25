@@ -1,5 +1,7 @@
 const fetchGraphQL = require("../lib/fetchGraphQL");
 const queryPhrasebooksBySlug = require("../queries/phrasebooks/queryPhrasebooksBySlug");
+const queryPhrasebooksByID = require("../queries/phrasebooks/queryPhrasebooksByID");
+const queryPhrasebooksNameByID = require("../queries/phrasebooks/queryPhrasebooksNameByID");
 const queryPhrasebooks = require("../queries/phrasebooks/queryPhrasebooks");
 const queryPhrasebooksByBotID = require("../queries/phrasebooks/queryPhrasebooksByBotID");
 const queryPhrasebooksByBotIDCursorSelector = require("../queries/phrasebooks/queryPhrasebooksByBotIDCursorSelector");
@@ -13,15 +15,28 @@ class PhrasebookService {
 
     return data?.sentenceSets?.nodes || [];
   }
-  async getOneBySlug(slug) {
-    if (!slug) {
+  async getSingleBy(id, idType) {
+    if (!id || !idType) {
       throw new Error("Invalid data was sent"); // 400
     }
 
-    const data = await fetchGraphQL(queryPhrasebooksBySlug, { slug });
+    const data =
+      idType === "DATABASE_ID"
+        ? await fetchGraphQL(queryPhrasebooksByID, { id })
+        : await fetchGraphQL(queryPhrasebooksBySlug, { id });
 
-    return data?.sentenceSetBy || [];
+    return data?.sentenceSet || [];
   }
+  async getNameByID(id) {
+    if (!id) {
+      throw new Error("Invalid data was sent"); // 400
+    }
+
+    const data = await fetchGraphQL(queryPhrasebooksNameByID, { id });
+
+    return data?.sentenceSet?.title || [];
+  }
+
   async getByBotID(id, query) {
     if (!id) {
       throw new Error("Invalid data was sent"); // 400

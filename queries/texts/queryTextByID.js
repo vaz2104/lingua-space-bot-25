@@ -1,6 +1,6 @@
 module.exports = `
-query queryTextBySlug($id: ID!) {
-  text(id: $id, idType: SLUG) {
+query queryTextByID($id: ID!) {
+  text(id: $id, idType: DATABASE_ID) {
       databaseId
       slug
       title(format: RENDERED)

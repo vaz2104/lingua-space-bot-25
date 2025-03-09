@@ -22,9 +22,10 @@ query queryGrammarRuleByBotIDCursorSelector($botID:[String], $cursor: String, $s
           name
         }
       }
-           RulesData {
-      rulesData {
-        content
+      RulesData {
+        rulesData {
+          content
+        }
       }
     }
   }

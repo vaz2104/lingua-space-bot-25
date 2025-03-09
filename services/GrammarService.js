@@ -2,47 +2,36 @@ const fetchGraphQL = require("../lib/fetchGraphQL");
 const queryGrammarRuleByBotID = require("../queries/grammar-rule/queryGrammarRuleByBotID");
 const queryGrammarRuleByBotIDCursorSelector = require("../queries/grammar-rule/queryGrammarRuleByBotIDCursorSelector");
 const queryGrammarRuleBySlug = require("../queries/grammar-rule/queryGrammarRuleBySlug");
-const queryTotalSetsNumber = require("../queries/grammar-rule/queryTotalSetsNumber");
+const queryGrammarRuleByID = require("../queries/grammar-rule/queryGrammarRuleByID");
 
-const queryGrammar = require("../queries/grammar/queryGrammar");
-const queryGrammarBySlug = require("../queries/grammar/queryGrammarBySlug");
-const querySentencesByGrammaSlug = require("../queries/grammar/querySentencesByGrammaSlug");
+const queryTotalSetsNumber = require("../queries/grammar-rule/queryTotalSetsNumber");
+const queryGrammarRuleNameByID = require("../queries/grammar-rule/queryGrammarRuleNameByID");
 
 class GrammarService {
-  async getAll() {
-    const data = await fetchGraphQL(queryGrammar, {});
-    // console.log(data);
-
-    return data?.grammars?.nodes || [];
-  }
-  async getOneBySlug(slug) {
-    const sentencesList = await fetchGraphQL(querySentencesByGrammaSlug, {
-      slug,
-    });
-    const grammarData = await fetchGraphQL(queryGrammarBySlug, {
-      slug,
-    });
-
-    // console.log(grammarData);
-
-    const response = {
-      title: grammarData?.grammar?.name,
-      level: grammarData?.grammar?.GrammarOptions?.grammarOptions?.level,
-      sentences: sentencesList?.sentences?.nodes,
-    };
-
-    return response || {};
-  }
-
-  async getOneBySlug(slug) {
-    if (!slug) {
+  async getSingleBy(query) {
+    if (!query?.id || !query?.idType) {
       throw new Error("Invalid data was sent"); // 400
     }
+    const { idType, id } = query;
 
-    const data = await fetchGraphQL(queryGrammarRuleBySlug, { slug });
+    const data =
+      idType === "DATABASE_ID"
+        ? await fetchGraphQL(queryGrammarRuleByID, { id })
+        : await fetchGraphQL(queryGrammarRuleBySlug, { id });
 
     return data?.grammarRule || [];
   }
+
+  async getGrammarNameByID(id) {
+    if (!id) {
+      throw new Error("Invalid data was sent"); // 400
+    }
+
+    const data = await fetchGraphQL(queryGrammarRuleNameByID, { id });
+
+    return data?.grammarRule?.title || [];
+  }
+
   async getByBotID(id, query) {
     if (!id) {
       throw new Error("Invalid data was sent"); // 400
