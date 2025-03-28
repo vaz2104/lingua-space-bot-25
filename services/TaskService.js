@@ -59,6 +59,42 @@ class TaskService {
       "students",
     ]);
   }
+  async delete(id) {
+    if (!id) {
+      throw new Error("Invalid data was sent"); // 400
+    }
+
+    return await StudentTaskRelationship.findByIdAndDelete(id);
+  }
+
+  async update(options) {
+    if (!options) {
+      throw new Error("Invalid data was sent"); // 400
+    }
+    let updatedTask = null;
+    if (options?.taskId && options?.taskOptions) {
+      updatedTask = await Task.findByIdAndUpdate(
+        options?.taskId,
+        options.taskOptions,
+        {
+          new: true,
+        }
+      );
+    }
+
+    let updatedTaskRelations = null;
+    if (options?.relationId && options?.relationOptions) {
+      updatedTaskRelations = await StudentTaskRelationship.findByIdAndUpdate(
+        options?.relationId,
+        options?.relationOptions,
+        {
+          new: true,
+        }
+      );
+    }
+
+    return [updatedTask, updatedTaskRelations] || null;
+  }
 }
 
 module.exports = new TaskService();

@@ -39,6 +39,22 @@ class TaskController {
       res.status(500).json(error.message);
     }
   }
+  async delete(req, res) {
+    try {
+      const data = await TaskService.delete(req?.params?.id);
+      res.json(data);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
+  async update(req, res) {
+    try {
+      const data = await TaskService.update(req?.body);
+      res.json(data);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
 }
 
 module.exports = new TaskController();
