@@ -8,6 +8,8 @@ const queryWordSetsByBotID = require("../queries/wordSets/queryWordSetsByBotID")
 const queryWordSetsByBotIDAllPages = require("../queries/wordSets/queryWordSetsByBotIDAllPages");
 const queryWordSetsByBotIDCursorSelector = require("../queries/wordSets/queryWordSetsByBotIDCursorSelector");
 
+const getWordsIn = require("../queries/words/queryWordsIn");
+
 class WordsetService {
   async getAll() {
     const data = await fetchGraphQL(queryWordSets, {});
@@ -89,6 +91,21 @@ class WordsetService {
     const data = await fetchGraphQL(queryTotalSetsNumber, { botID: id });
 
     return data?.wordSets?.pageInfo?.offsetPagination?.total || null;
+  }
+
+  async getWordsAll(options) {
+    let data = null;
+
+    if (options?.in) {
+      const ids = options?.in.split(",");
+      if (ids && ids?.length) {
+        data = await fetchGraphQL(getWordsIn, {
+          in: ids,
+        });
+      }
+    }
+
+    return data?.words?.nodes || [];
   }
 }
 

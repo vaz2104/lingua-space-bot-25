@@ -54,6 +54,15 @@ class WordsetController {
       res.status(500).json(error.message);
     }
   }
+
+  async getWordsAll(req, res) {
+    try {
+      const data = await WordsetService.getWordsAll(req?.query);
+      res.json(data);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
 }
 
 module.exports = new WordsetController();

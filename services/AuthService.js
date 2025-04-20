@@ -1,6 +1,7 @@
 const generateRandomKey = require("../lib/generateRandomKey");
 const Auth = require("../models/Auth");
 const InviteLink = require("../models/InviteLink");
+const PlatformUser = require("../models/PlatformUser");
 const TelegramUserService = require("./TelegramUserService");
 
 class AuthService {
@@ -10,7 +11,9 @@ class AuthService {
     if (!options?.telegramUserId) {
       throw new Error("Invalid data was sent"); // 400
     }
-    options.key = generateRandomKey(5);
+    await Auth.deleteMany({ telegramUserId: options?.telegramUserId });
+
+    options.key = generateRandomKey(5, true);
     const authData = await Auth.create(options);
 
     return authData;
@@ -35,6 +38,13 @@ class AuthService {
 
     if (!telegramUser) return null;
 
+    const platformUser = await PlatformUser.findOne({
+      telegramUserId: telegramUser._id,
+      role: options.role,
+    });
+
+    if (!platformUser) return null;
+
     const authData = await Auth.findOne({
       telegramUserId: telegramUser._id,
       key: options.key,
@@ -42,9 +52,9 @@ class AuthService {
 
     if (!authData) return null;
 
-    // await Auth.findByIdAndDelete(authData._id);
+    await Auth.deleteMany({ telegramUserId: telegramUser._id });
 
-    return telegramUser;
+    return { ...telegramUser?._doc, role: options.role };
   }
 
   async createInviteLink(botId) {

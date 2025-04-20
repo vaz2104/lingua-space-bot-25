@@ -55,6 +55,14 @@ class TaskController {
       res.status(500).json(error.message);
     }
   }
+  async updateTaskMeta(req, res) {
+    try {
+      const data = await TaskService.updateTaskMeta(req?.body);
+      res.json(data);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
 }
 
 module.exports = new TaskController();

@@ -9,4 +9,6 @@ router.get("/wordset/bot/full-list/:id", WordsetController.getByBotIDFullList);
 router.get("/wordset/sets-number/:id", WordsetController.getTotalSetsNumber);
 router.get("/wordset/get-name/:id", WordsetController.getNameByID);
 
+router.get("/words", WordsetController.getWordsAll);
+
 module.exports = router;

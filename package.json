@@ -15,14 +15,17 @@
   "type": "commonjs",
   "description": "",
   "dependencies": {
+    "assemblyai": "^4.9.0",
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
     "cross-fetch": "^4.1.0",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "moment-timezone": "^0.5.47",
+    "multer": "^1.4.5-lts.2",
     "node-telegram-bot-api": "^0.66.0",
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "openai": "^4.94.0"
   },
   "devDependencies": {
     "mongoose": "^8.9.5"

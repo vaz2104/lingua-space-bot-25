@@ -24,7 +24,7 @@ const StudentTaskRelationshipSchema = new Schema({
   },
   status: {
     type: String,
-    default: "inactive", // active | finished
+    default: "inactive", // published | finished
   },
   dateStart: {
     type: Date,

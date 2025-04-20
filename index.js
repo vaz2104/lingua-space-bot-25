@@ -18,6 +18,8 @@ const phrasebooksRouts = require("./routs/phrasebooksRouts");
 const textRouts = require("./routs/textRouts");
 const taskRouts = require("./routs/taskRouts");
 
+const thirdPartyAPIRouts = require("./routs/thirdPartyAPIRouts");
+
 const BotMethods = require("./lib/BotMethods");
 const PanelsInitialization = require("./lib/InitBotsPanel");
 
@@ -57,9 +59,14 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.urlencoded(extended:false))
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", `${process.env.APP_URL || "*"}`);
+  const allowedOrigins = [process.env.APP_URL, process.env.PLATFORM_URL];
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
   next();
 });
 
@@ -78,6 +85,8 @@ app.use("/api", wordsetRouts);
 app.use("/api", phrasebooksRouts);
 app.use("/api", textRouts);
 app.use("/api", taskRouts);
+
+app.use("/api", thirdPartyAPIRouts);
 
 app.listen(process.env.PORT, () => {
   console.log(`Main bot started and listening on port ${process.env.PORT}`);
