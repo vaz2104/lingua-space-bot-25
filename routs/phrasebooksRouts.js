@@ -3,6 +3,7 @@ const router = express.Router();
 const PhrasebookController = require("../controllers/PhrasebookController");
 
 router.get("/phrasebook", PhrasebookController.getAll);
+router.get("/phrasebook/phrases", PhrasebookController.getPhrases);
 router.get("/phrasebook/:id", PhrasebookController.getSingleBy);
 router.get("/phrasebook/get-name/:id", PhrasebookController.getNameByID);
 

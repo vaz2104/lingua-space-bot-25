@@ -13,6 +13,15 @@ query queryTextByID($id: ID!) {
           image {
             mediaItemUrl
           }
+          quizGroup {
+            quiz {
+              question
+              correctAnswer
+              answers {
+                answer
+              }
+            }
+          }
         }
       }
       levels {

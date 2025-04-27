@@ -6,6 +6,7 @@ const queryPhrasebooks = require("../queries/phrasebooks/queryPhrasebooks");
 const queryPhrasebooksByBotID = require("../queries/phrasebooks/queryPhrasebooksByBotID");
 const queryPhrasebooksByBotIDCursorSelector = require("../queries/phrasebooks/queryPhrasebooksByBotIDCursorSelector");
 const queryTotalSetsNumber = require("../queries/phrasebooks/queryTotalSetsNumber");
+const queryPhrasesIn = require("../queries/phrases/queryPhrasesIn");
 
 class PhrasebookService {
   async getAll() {
@@ -75,6 +76,25 @@ class PhrasebookService {
     const data = await fetchGraphQL(queryTotalSetsNumber, { botID: id });
 
     return data?.sentenceSets?.pageInfo?.offsetPagination?.total || null;
+  }
+
+  async getPhrases(options) {
+    let data = null;
+
+    if (options?.in) {
+      const ids = options?.in.split(",");
+      console.log(ids);
+
+      if (ids && ids?.length) {
+        data = await fetchGraphQL(queryPhrasesIn, {
+          in: ids,
+        });
+      }
+    }
+
+    console.log(data);
+
+    return data?.sentences?.nodes || [];
   }
 }
 

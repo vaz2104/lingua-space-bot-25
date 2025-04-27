@@ -22,7 +22,16 @@ query queryTextsByBotID($botID:[String], $offset: Int, $size: Int)  {
             image {
               mediaItemUrl
             }
-          }
+            quizGroup {
+              quiz {
+                  question
+                  correctAnswer
+                  answers {
+                    answer
+                  }
+                }
+              }
+            }
         }
     }
   }

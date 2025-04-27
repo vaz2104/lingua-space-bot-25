@@ -48,6 +48,14 @@ class PhrasebookController {
       res.status(500).json(error.message);
     }
   }
+  async getPhrases(req, res) {
+    try {
+      const data = await PhrasebookService.getPhrases(req?.query);
+      res.json(data);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
 }
 
 module.exports = new PhrasebookController();
