@@ -59,6 +59,14 @@ class StudentController {
       res.status(500).json(error.message);
     }
   }
+  async getPanels(req, res) {
+    try {
+      const data = await StudentService.getPanels(req?.params?.userId);
+      res.json(data);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
 }
 
 module.exports = new StudentController();

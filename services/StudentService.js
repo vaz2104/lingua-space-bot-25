@@ -55,6 +55,17 @@ class StudentService {
 
     return relation;
   }
+  async getPanels(userId) {
+    if (!userId) {
+      throw new Error("Invalid data was sent"); // 400
+    }
+
+    const relation = await StudentBotRelationship.find({ studentId: userId }, [
+      "botId",
+    ]);
+
+    return relation;
+  }
 }
 
 module.exports = new StudentService();

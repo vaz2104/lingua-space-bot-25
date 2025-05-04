@@ -11,7 +11,6 @@ router.get(
   StudentController.StudentPlatformRelation
 );
 router.get("/student/tasks/:id", StudentController.getTasks);
-
-// router.put("/student", StudentController.update);
+router.get("/student/panel/:userId", StudentController.getPanels);
 
 module.exports = router;
