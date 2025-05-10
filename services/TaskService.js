@@ -28,6 +28,16 @@ class TaskService {
     return [newTask, newTaskRelations] || null;
   }
 
+  async assign(options) {
+    if (!options) {
+      throw new Error("Invalid data was sent"); // 400
+    }
+
+    const newTaskRelation = await StudentTaskRelationship.create(options);
+
+    return newTaskRelation;
+  }
+
   async getByBotId(botId, adminId) {
     if (!botId || !adminId) {
       throw new Error("Invalid data was sent"); // 400
@@ -50,6 +60,16 @@ class TaskService {
   }
 
   async getTaskByID(id) {
+    if (!id) {
+      throw new Error("Invalid data was sent"); // 400
+    }
+
+    const task = await Task.findById(id);
+
+    return task;
+  }
+
+  async getTaskRelationByID(id) {
     if (!id) {
       throw new Error("Invalid data was sent"); // 400
     }
@@ -145,6 +165,16 @@ class TaskService {
         new: true,
       }
     );
+  }
+
+  async getSavedByBotID(options) {
+    console.log(options);
+
+    if (!options) {
+      throw new Error("Invalid data was sent"); // 400
+    }
+
+    return await Task.find(options).sort([["date", -1]]);
   }
 }
 

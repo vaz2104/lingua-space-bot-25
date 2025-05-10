@@ -30,9 +30,17 @@ const TaskSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  isVisible: {
+    type: Boolean,
+    default: true,
+  },
   date: {
     type: Date,
     default: new Date(dateUkrainTZ),
+  },
+  timestamp: {
+    type: Number,
+    default: Date.now(),
   },
 });
 

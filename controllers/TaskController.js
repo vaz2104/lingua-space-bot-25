@@ -9,6 +9,14 @@ class TaskController {
       res.status(500).json(error.message);
     }
   }
+  async assign(req, res) {
+    try {
+      const data = await TaskService.assign(req?.body);
+      res.json(data);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
   async getByBotId(req, res) {
     try {
       const data = await TaskService.getByBotId(
@@ -58,6 +66,14 @@ class TaskController {
   async updateTaskMeta(req, res) {
     try {
       const data = await TaskService.updateTaskMeta(req?.body);
+      res.json(data);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
+  async getSavedByBotID(req, res) {
+    try {
+      const data = await TaskService.getSavedByBotID(req?.query);
       res.json(data);
     } catch (error) {
       res.status(500).json(error.message);

@@ -1,18 +1,17 @@
 const { Schema, model } = require("mongoose");
-const dateUkrainTZ = require("../lib/getCurrentDateUkrainTimeZone");
 
-const TaskMetaSchema = new Schema({
+const LessonMetaSchema = new Schema({
   studentId: {
     type: Schema.Types.ObjectId,
     ref: "TelegramUser",
   },
-  taskId: {
+  lessonId: {
+    type: Schema.Types.ObjectId,
+    ref: "Lesson",
+  },
+  activeTask: {
     type: Schema.Types.ObjectId,
     ref: "Task",
-  },
-  activeExercise: {
-    type: String,
-    default: "",
   },
   meta: {
     type: String,
@@ -32,4 +31,4 @@ const TaskMetaSchema = new Schema({
   },
 });
 
-module.exports = model("TaskMeta", TaskMetaSchema);
+module.exports = model("LessonMeta", LessonMetaSchema);

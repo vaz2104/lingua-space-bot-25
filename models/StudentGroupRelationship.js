@@ -14,6 +14,10 @@ const StudentGroupRelationshipSchema = new Schema({
     type: Date,
     default: new Date(dateUkrainTZ),
   },
+  timestamp: {
+    type: Number,
+    default: Date.now(),
+  },
 });
 
 module.exports = model(

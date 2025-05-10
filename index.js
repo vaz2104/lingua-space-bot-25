@@ -17,6 +17,8 @@ const wordsetRouts = require("./routs/wordsetRouts");
 const phrasebooksRouts = require("./routs/phrasebooksRouts");
 const textRouts = require("./routs/textRouts");
 const taskRouts = require("./routs/taskRouts");
+const lessonRouts = require("./routs/lessonRouts");
+const courseRouts = require("./routs/courseRouts");
 
 const thirdPartyAPIRouts = require("./routs/thirdPartyAPIRouts");
 
@@ -85,6 +87,8 @@ app.use("/api", wordsetRouts);
 app.use("/api", phrasebooksRouts);
 app.use("/api", textRouts);
 app.use("/api", taskRouts);
+app.use("/api", lessonRouts);
+app.use("/api", courseRouts);
 
 app.use("/api", thirdPartyAPIRouts);
 
