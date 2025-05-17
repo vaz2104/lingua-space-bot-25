@@ -64,11 +64,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(bodyParser.urlencoded(extended:false))
 
 app.use((req, res, next) => {
-  const allowedOrigins = [process.env.APP_URL, process.env.PLATFORM_URL];
-  const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-  }
+  // const allowedOrigins = [process.env.APP_URL, process.env.PLATFORM_URL];
+  // const origin = req.headers.origin;
+  // if (allowedOrigins.includes(origin)) {
+  //   res.setHeader("Access-Control-Allow-Origin", origin);
+  // }
+  res.setHeader("Access-Control-Allow-Origin", process.env.APP_URL);
   next();
 });
 
