@@ -65,6 +65,23 @@ class CourseService {
 
     return updatedCourse;
   }
+  async getAssigned(options) {
+    if (!options) {
+      throw new Error("Invalid data was sent"); // 400
+    }
+
+    return await StudentCourseRelationship.find(options)
+      .populate(["courseId", "groupID", "students"])
+      .populate({
+        path: "courseId",
+        populate: [
+          {
+            path: "selectedLessons",
+            model: "Lesson",
+          },
+        ],
+      });
+  }
 }
 
 module.exports = new CourseService();

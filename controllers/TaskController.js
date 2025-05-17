@@ -28,12 +28,9 @@ class TaskController {
       res.status(500).json(error.message);
     }
   }
-  async getAssignedByBotID(req, res) {
+  async getAssigned(req, res) {
     try {
-      const data = await TaskService.getAssignedByBotID(
-        req?.params?.id,
-        req?.query?.teacher
-      );
+      const data = await TaskService.getAssigned(req?.query);
       res.json(data);
     } catch (error) {
       res.status(500).json(error.message);
@@ -74,6 +71,22 @@ class TaskController {
   async getSavedByBotID(req, res) {
     try {
       const data = await TaskService.getSavedByBotID(req?.query);
+      res.json(data);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
+  async getTaskRelationByID(req, res) {
+    try {
+      const data = await TaskService.getTaskRelationByID(req?.params?.id);
+      res.json(data);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
+  async getTaskMeta(req, res) {
+    try {
+      const data = await TaskService.getTaskMeta(req?.query);
       res.json(data);
     } catch (error) {
       res.status(500).json(error.message);

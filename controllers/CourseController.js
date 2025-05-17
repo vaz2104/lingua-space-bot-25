@@ -49,6 +49,14 @@ class CourseController {
       res.status(500).json(error.message);
     }
   }
+  async getAssigned(req, res) {
+    try {
+      const data = await CourseService.getAssigned(req?.query);
+      res.json(data);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
 }
 
 module.exports = new CourseController();

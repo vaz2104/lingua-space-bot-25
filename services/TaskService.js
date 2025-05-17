@@ -34,6 +34,19 @@ class TaskService {
     }
 
     const newTaskRelation = await StudentTaskRelationship.create(options);
+    let taskMeta = [];
+
+    Promise.all(
+      options?.students.map(async (studentId) => {
+        const newMeta = await TaskMeta.create({
+          studentId,
+          taskId: options?.taskId,
+        });
+        taskMeta.push(newMeta);
+      })
+    ).then(() => {
+      console.log("Task Meta Created");
+    });
 
     return newTaskRelation;
   }
@@ -45,18 +58,30 @@ class TaskService {
 
     return await Task.find({ botId, adminId });
   }
-  async getAssignedByBotID(botId, adminId) {
-    console.log(botId, adminId);
-
-    if (!botId || !adminId) {
+  async getAssigned(options) {
+    if (!options) {
       throw new Error("Invalid data was sent"); // 400
     }
 
-    return await StudentTaskRelationship.find({ botId, adminId }).populate([
+    const tasks = [];
+    const relations = await StudentTaskRelationship.find(options).populate([
       "taskId",
       "groupID",
       "students",
     ]);
+
+    if (!relations) return [];
+
+    await Promise.all(
+      relations.map(async (relation) => {
+        const meta = await TaskMeta.findOne({ taskId: relation?.taskId?._id });
+        tasks.push({ ...relation?._doc, meta });
+      })
+    ).then(() => {
+      console.log("Task Meta Created");
+    });
+
+    return tasks;
   }
 
   async getTaskByID(id) {
@@ -121,27 +146,27 @@ class TaskService {
         }
       );
 
-      if (
-        options?.relationOptions?.status &&
-        options?.relationOptions?.status === "published"
-      ) {
-        if (
-          updatedTaskRelations?.students &&
-          updatedTaskRelations?.students.length
-        ) {
-          Promise.all(
-            updatedTaskRelations?.students.map(async (studentId) => {
-              const newMeta = await TaskMeta.create({
-                studentId,
-                taskId: updatedTaskRelations?.taskId,
-              });
-              taskMeta.push(newMeta);
-            })
-          ).then(() => {
-            console.log("Task Meta Created");
-          });
-        }
-      }
+      // if (
+      //   options?.relationOptions?.status &&
+      //   options?.relationOptions?.status === "published"
+      // ) {
+      //   if (
+      //     updatedTaskRelations?.students &&
+      //     updatedTaskRelations?.students.length
+      //   ) {
+      //     Promise.all(
+      //       updatedTaskRelations?.students.map(async (studentId) => {
+      //         const newMeta = await TaskMeta.create({
+      //           studentId,
+      //           taskId: updatedTaskRelations?.taskId,
+      //         });
+      //         taskMeta.push(newMeta);
+      //       })
+      //     ).then(() => {
+      //       console.log("Task Meta Created");
+      //     });
+      //   }
+      // }
     }
 
     return [updatedTask, updatedTaskRelations, taskMeta] || null;
@@ -168,13 +193,22 @@ class TaskService {
   }
 
   async getSavedByBotID(options) {
-    console.log(options);
+    // console.log(options);
 
     if (!options) {
       throw new Error("Invalid data was sent"); // 400
     }
 
     return await Task.find(options).sort([["date", -1]]);
+  }
+  async getTaskMeta(options) {
+    // console.log("getTaskMeta", options);
+
+    if (!options) {
+      throw new Error("Invalid data was sent"); // 400
+    }
+
+    return await TaskMeta.findOne(options);
   }
 }
 

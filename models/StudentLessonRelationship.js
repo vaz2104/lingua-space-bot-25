@@ -22,6 +22,10 @@ const StudentLessonRelationshipSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Lesson",
   },
+  lessonType: {
+    type: String,
+    default: "", // single | course
+  },
   status: {
     type: String,
     default: "published", // inactive | finished
@@ -32,9 +36,11 @@ const StudentLessonRelationshipSchema = new Schema({
   },
   dateFinish: {
     type: Date,
+    default: "",
   },
   deadline: {
     type: Date,
+    default: "",
   },
   timestamp: {
     type: Number,

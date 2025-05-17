@@ -49,6 +49,22 @@ class LessonController {
       res.status(500).json(error.message);
     }
   }
+  async updateMeta(req, res) {
+    try {
+      const data = await LessonService.updateMeta(req?.body);
+      res.json(data);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
+  async getAssigned(req, res) {
+    try {
+      const data = await LessonService.getAssigned(req?.query);
+      res.json(data);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
 }
 
 module.exports = new LessonController();

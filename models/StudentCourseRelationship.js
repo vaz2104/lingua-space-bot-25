@@ -32,9 +32,11 @@ const StudentCourseRelationshipSchema = new Schema({
   },
   dateFinish: {
     type: Date,
+    default: "",
   },
   deadline: {
     type: Date,
+    default: "",
   },
   timestamp: {
     type: Number,

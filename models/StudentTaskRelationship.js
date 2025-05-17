@@ -26,15 +26,21 @@ const StudentTaskRelationshipSchema = new Schema({
     type: String,
     default: "published", // inactive | finished
   },
+  taskType: {
+    type: String,
+    default: "", // single | lesson
+  },
   dateStart: {
     type: Date,
     default: new Date(dateUkrainTZ),
   },
   dateFinish: {
     type: Date,
+    default: "",
   },
   deadline: {
     type: Date,
+    default: "",
   },
   timestamp: {
     type: Number,
