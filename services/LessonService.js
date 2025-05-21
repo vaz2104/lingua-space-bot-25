@@ -25,7 +25,7 @@ class LessonService {
       options?.students.map(async (studentId) => {
         const newMeta = await LessonMeta.create({
           studentId,
-          lessonId: options?.lessonId,
+          lessonRelationId: newLessonRelation?._id,
         });
         meta.push(newMeta);
       })
@@ -131,7 +131,7 @@ class LessonService {
     await Promise.all(
       relations.map(async (relation, index) => {
         const meta = await LessonMeta.findOne({
-          lessonId: relation?.lessonId?._id,
+          lessonRelationId: relation?._id,
         });
 
         responseData.push({ ...relation?._doc, meta });
@@ -161,6 +161,17 @@ class LessonService {
         new: true,
       }
     );
+  }
+  async getMeta(options) {
+    if (!options) {
+      throw new Error("Invalid data was sent"); // 400
+    }
+    console.log(options);
+
+    const meta = await LessonMeta.find(options);
+    console.log(meta);
+
+    return meta;
   }
 }
 

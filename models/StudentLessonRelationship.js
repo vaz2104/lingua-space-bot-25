@@ -26,6 +26,10 @@ const StudentLessonRelationshipSchema = new Schema({
     type: String,
     default: "", // single | course
   },
+  courseRelationId: {
+    type: Schema.Types.ObjectId,
+    ref: "StudentCourseRelationship",
+  },
   status: {
     type: String,
     default: "published", // inactive | finished

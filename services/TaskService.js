@@ -40,7 +40,7 @@ class TaskService {
       options?.students.map(async (studentId) => {
         const newMeta = await TaskMeta.create({
           studentId,
-          taskId: options?.taskId,
+          relationId: newTaskRelation?._id,
         });
         taskMeta.push(newMeta);
       })
@@ -74,7 +74,7 @@ class TaskService {
 
     await Promise.all(
       relations.map(async (relation) => {
-        const meta = await TaskMeta.findOne({ taskId: relation?.taskId?._id });
+        const meta = await TaskMeta.findOne({ relationId: relation?._id });
         tasks.push({ ...relation?._doc, meta });
       })
     ).then(() => {
@@ -107,7 +107,7 @@ class TaskService {
 
     if (!relation?._id) return null;
 
-    const meta = await TaskMeta.findOne({ taskId: relation?.taskId?._id });
+    const meta = await TaskMeta.findOne({ relationId: relation?._id });
 
     return { ...relation?._doc, meta };
   }
@@ -145,28 +145,6 @@ class TaskService {
           new: true,
         }
       );
-
-      // if (
-      //   options?.relationOptions?.status &&
-      //   options?.relationOptions?.status === "published"
-      // ) {
-      //   if (
-      //     updatedTaskRelations?.students &&
-      //     updatedTaskRelations?.students.length
-      //   ) {
-      //     Promise.all(
-      //       updatedTaskRelations?.students.map(async (studentId) => {
-      //         const newMeta = await TaskMeta.create({
-      //           studentId,
-      //           taskId: updatedTaskRelations?.taskId,
-      //         });
-      //         taskMeta.push(newMeta);
-      //       })
-      //     ).then(() => {
-      //       console.log("Task Meta Created");
-      //     });
-      //   }
-      // }
     }
 
     return [updatedTask, updatedTaskRelations, taskMeta] || null;

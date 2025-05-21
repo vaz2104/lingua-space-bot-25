@@ -6,9 +6,9 @@ const TaskMetaSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "TelegramUser",
   },
-  taskId: {
+  relationId: {
     type: Schema.Types.ObjectId,
-    ref: "Task",
+    ref: "StudentTaskRelationship",
   },
   activeExercise: {
     type: String,

@@ -5,6 +5,7 @@ const LessonController = require("../controllers/LessonController");
 router.post("/lesson", LessonController.create);
 router.post("/lesson/assign", LessonController.assign);
 router.get("/lesson", LessonController.getMany);
+router.get("/lesson/meta", LessonController.getMeta);
 router.get("/lesson/assigned", LessonController.getAssigned);
 router.get("/lesson/:id", LessonController.getByID);
 router.put("/lesson", LessonController.update);

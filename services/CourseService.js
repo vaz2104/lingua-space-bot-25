@@ -1,4 +1,5 @@
 const Course = require("../models/Course");
+const CourseMeta = require("../models/CourseMeta");
 const StudentCourseRelationship = require("../models/StudentCourseRelationship");
 
 class CourseService {
@@ -17,6 +18,20 @@ class CourseService {
     }
 
     const newCourseRelation = await StudentCourseRelationship.create(options);
+
+    let meta = [];
+
+    Promise.all(
+      options?.students.map(async (studentId) => {
+        const newMeta = await CourseMeta.create({
+          studentId,
+          courseRelationId: newCourseRelation?._id,
+        });
+        meta.push(newMeta);
+      })
+    ).then(() => {
+      console.log("Task Meta Created");
+    });
 
     return newCourseRelation;
   }
@@ -63,6 +78,33 @@ class CourseService {
       );
     }
 
+    if (options?.relationId && options?.relationOptions) {
+      const updatedCourseRelations =
+        await StudentCourseRelationship.findByIdAndUpdate(
+          options?.relationId,
+          options?.relationOptions,
+          {
+            new: true,
+          }
+        );
+
+      const relations = await StudentCourseRelationship.findById(
+        updatedCourseRelations?._id
+      )
+        .populate(["courseId", "groupID", "students"])
+        .populate({
+          path: "courseId",
+          populate: [
+            {
+              path: "selectedLessons",
+              model: "Lesson",
+            },
+          ],
+        });
+
+      return relations;
+    }
+
     return updatedCourse;
   }
   async getAssigned(options) {
@@ -70,7 +112,7 @@ class CourseService {
       throw new Error("Invalid data was sent"); // 400
     }
 
-    return await StudentCourseRelationship.find(options)
+    const relations = await StudentCourseRelationship.find(options)
       .populate(["courseId", "groupID", "students"])
       .populate({
         path: "courseId",
@@ -81,6 +123,41 @@ class CourseService {
           },
         ],
       });
+
+    if (!relations.length) return null;
+
+    const responseData = [];
+
+    await Promise.all(
+      relations.map(async (relation, index) => {
+        const meta = await CourseMeta.findOne({
+          courseRelationId: relation?._id,
+        });
+
+        responseData.push({ ...relation?._doc, meta });
+      })
+    ).then(() => {
+      console.log("course meta selected");
+    });
+
+    return responseData;
+  }
+  async updateMeta(options) {
+    if (!options) {
+      throw new Error("Invalid data was sent"); // 400
+    }
+
+    if (!options?.metaId || !options?.metaOptions) {
+      return null;
+    }
+
+    return await CourseMeta.findByIdAndUpdate(
+      options?.metaId,
+      options?.metaOptions,
+      {
+        new: true,
+      }
+    );
   }
 }
 

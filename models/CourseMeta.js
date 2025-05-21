@@ -5,9 +5,9 @@ const CourseMetaSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "TelegramUser",
   },
-  courseId: {
+  courseRelationId: {
     type: Schema.Types.ObjectId,
-    ref: "Course",
+    ref: "StudentCourseRelationship",
   },
   activeLesson: {
     type: Schema.Types.ObjectId,
