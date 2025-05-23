@@ -14,10 +14,10 @@ router.get("/task-relation/:id", TaskController.TaskRelationGetSingle);
 router.delete("/task-relation/:id", TaskController.TaskRelationDelete);
 router.put("/task-relation", TaskController.TaskRelationUpdate);
 
-router.post("/relation-meta", TaskController.RelationMetaCreate);
-router.get("/relation-meta", TaskController.RelationMetaGetMany);
-router.get("/relation-meta/:id", TaskController.RelationMetaGetSingle); // find by relationId ( NOT BY _id )
-router.delete("/relation-meta/:id", TaskController.RelationMetaDelete);
-router.put("/relation-meta", TaskController.RelationMetaUpdate);
+router.post("/task-relation-meta", TaskController.RelationMetaCreate);
+router.get("/task-relation-meta", TaskController.RelationMetaGetMany);
+router.get("/task-relation-meta/:id", TaskController.RelationMetaGetSingle); // find by relationId ( NOT BY _id )
+router.delete("/task-relation-meta/:id", TaskController.RelationMetaDelete);
+router.put("/task-relation-meta", TaskController.RelationMetaUpdate);
 
 module.exports = router;

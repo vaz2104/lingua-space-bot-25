@@ -1,118 +1,117 @@
 const Course = require("../models/Course");
-const CourseMeta = require("../models/CourseMeta");
+const CourseRelationMeta = require("../models/CourseRelationMeta");
 const StudentCourseRelationship = require("../models/StudentCourseRelationship");
 
 class CourseService {
-  async create(options) {
+  /**
+   * LESSON METHODS
+   */
+
+  async CourseCreate(options) {
     if (!options) {
-      throw new Error("Invalid data was sent"); // 400
+      throw new Error("CourseCreate -> Invalid data was sent");
     }
 
-    const newCourse = await Course.create(options);
-
-    return newCourse;
+    return await Course.create(options);
   }
-  async assign(options) {
+  async CourseGetMany(options) {
     if (!options) {
-      throw new Error("Invalid data was sent"); // 400
+      throw new Error("CourseGetMany -> Invalid data was sent");
     }
 
-    const newCourseRelation = await StudentCourseRelationship.create(options);
-
-    let meta = [];
-
-    Promise.all(
-      options?.students.map(async (studentId) => {
-        const newMeta = await CourseMeta.create({
-          studentId,
-          courseRelationId: newCourseRelation?._id,
-        });
-        meta.push(newMeta);
-      })
-    ).then(() => {
-      console.log("Task Meta Created");
-    });
-
-    return newCourseRelation;
+    return await Course.find(options)
+      .populate(["selectedLessons"])
+      .sort([["timestamp", -1]]);
   }
-  async getMany(options) {
-    if (!options) {
-      throw new Error("Invalid data was sent"); // 400
-    }
-
-    const course = await Course.find(options);
-
-    return course;
-  }
-
-  async getByID(id) {
+  async CourseGetSingle(id) {
     if (!id) {
-      throw new Error("Invalid data was sent"); // 400
+      throw new Error("CourseGetSingle -> Invalid data was sent");
     }
 
-    const course = await Course.findById(id).populate(["selectedLessons"]);
-
-    return course;
+    return await Course.findById(id).populate(["selectedLessons"]);
   }
-
-  async delete(id) {
+  async CourseDelete(id) {
     if (!id) {
-      throw new Error("Invalid data was sent"); // 400
+      throw new Error("CourseDelete -> Invalid data was sent");
     }
 
     return await Course.findByIdAndDelete(id);
   }
-
-  async update(options) {
-    if (!options) {
-      throw new Error("Invalid data was sent"); // 400
-    }
-    let updatedCourse = null;
-    if (options?.id && options?.courseOptions) {
-      updatedCourse = await Course.findByIdAndUpdate(
-        options?.id,
-        options.courseOptions,
-        {
-          new: true,
-        }
-      );
+  async CourseUpdate(id, options) {
+    if (!id || !options) {
+      throw new Error("CourseUpdate -> Invalid data was sent");
     }
 
-    if (options?.relationId && options?.relationOptions) {
-      const updatedCourseRelations =
-        await StudentCourseRelationship.findByIdAndUpdate(
-          options?.relationId,
-          options?.relationOptions,
-          {
-            new: true,
-          }
-        );
-
-      const relations = await StudentCourseRelationship.findById(
-        updatedCourseRelations?._id
-      )
-        .populate(["courseId", "groupID", "students"])
-        .populate({
-          path: "courseId",
-          populate: [
-            {
-              path: "selectedLessons",
-              model: "Lesson",
-            },
-          ],
-        });
-
-      return relations;
-    }
-
-    return updatedCourse;
+    return await Course.findByIdAndUpdate(id, options, {
+      new: true,
+    });
   }
-  async getAssigned(options) {
+
+  /**
+   * LESSON RELATION METHODS
+   */
+
+  async CourseRelationCreate(options) {
     if (!options) {
-      throw new Error("Invalid data was sent"); // 400
+      throw new Error("CourseRelationCreate -> Invalid data was sent");
     }
 
+    const newCourseRelation = await StudentCourseRelationship.create(options);
+
+    if (newCourseRelation?.students && newCourseRelation?.students?.length) {
+      await Promise.all(
+        newCourseRelation?.students.map(async (studentId) => {
+          await this.RelationMetaCreate({
+            studentId,
+            courseRelationId: newCourseRelation?._id,
+          });
+        })
+      ).then(() => {
+        console.log("RelationMetaCreate finished");
+      });
+    }
+
+    return newCourseRelation;
+  }
+
+  async CourseRelationGetMany(options) {
+    if (!options) {
+      throw new Error("CourseRelationGetMany -> Invalid data was sent");
+    }
+
+    const courses = [];
     const relations = await StudentCourseRelationship.find(options)
+      .populate(["courseId", "groupID", "students"])
+      .populate({
+        path: "courseId",
+        populate: [
+          {
+            path: "selectedLessons",
+            model: "Lesson",
+          },
+        ],
+      })
+      .sort([["timestamp", -1]]);
+
+    if (!relations) return null;
+
+    await Promise.all(
+      relations.map(async (relation) => {
+        const meta = await this.RelationMetaGetSingle(relation?._id);
+        courses.push({ ...relation?._doc, meta });
+      })
+    ).then(() => {
+      console.log("RelationMetaGetSingle selected");
+    });
+
+    return courses;
+  }
+  async CourseRelationGetSingle(id) {
+    if (!id) {
+      throw new Error("CourseRelationGetSingle -> Invalid data was sent");
+    }
+
+    const relation = await StudentCourseRelationship.findById(id)
       .populate(["courseId", "groupID", "students"])
       .populate({
         path: "courseId",
@@ -124,40 +123,69 @@ class CourseService {
         ],
       });
 
-    if (!relations.length) return null;
+    if (!relation?._id) return null;
 
-    const responseData = [];
+    const meta = await this.RelationMetaGetSingle(relation?._id);
 
-    await Promise.all(
-      relations.map(async (relation, index) => {
-        const meta = await CourseMeta.findOne({
-          courseRelationId: relation?._id,
-        });
-
-        responseData.push({ ...relation?._doc, meta });
-      })
-    ).then(() => {
-      console.log("course meta selected");
-    });
-
-    return responseData;
+    return { ...relation?._doc, meta };
   }
-  async updateMeta(options) {
+  async CourseRelationDelete(id) {
+    if (!id) {
+      throw new Error("CourseRelationDelete -> Invalid data was sent");
+    }
+
+    return await StudentCourseRelationship.findByIdAndDelete(id);
+  }
+  async CourseRelationUpdate(id, options) {
+    if (!id || !options) {
+      throw new Error("CourseRelationUpdate -> Invalid data was sent");
+    }
+
+    return await StudentCourseRelationship.findByIdAndUpdate(id, options, {
+      new: true,
+    });
+  }
+
+  /**
+   * LESSON RELATION META METHODS
+   */
+
+  async RelationMetaCreate(options) {
     if (!options) {
-      throw new Error("Invalid data was sent"); // 400
+      throw new Error("RelationMetaCreate -> Invalid data was sent");
     }
 
-    if (!options?.metaId || !options?.metaOptions) {
-      return null;
+    return await CourseRelationMeta.create(options);
+  }
+  async RelationMetaGetMany(options) {
+    if (!options) {
+      throw new Error("RelationMetaGetMany -> Invalid data was sent");
     }
 
-    return await CourseMeta.findByIdAndUpdate(
-      options?.metaId,
-      options?.metaOptions,
-      {
-        new: true,
-      }
-    );
+    return await CourseRelationMeta.find(options).sort([["timestamp", -1]]);
+  }
+  async RelationMetaGetSingle(id) {
+    if (!id) {
+      throw new Error("RelationMetaGetSingle -> Invalid data was sent");
+    }
+
+    return await CourseRelationMeta.findOne({ courseRelationId: id });
+  }
+  async RelationMetaDelete(id) {
+    if (!id) {
+      throw new Error("RelationMetaDelete -> Invalid data was sent");
+    }
+
+    return await CourseRelationMeta.findByIdAndDelete(id);
+  }
+  async RelationMetaUpdate(id, options) {
+    if (!id || !options) {
+      throw new Error("RelationMetaUpdate -> Invalid data was sent");
+    }
+
+    return await CourseRelationMeta.findByIdAndUpdate(id, options, {
+      new: true,
+    });
   }
 }
 

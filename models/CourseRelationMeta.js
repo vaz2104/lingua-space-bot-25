@@ -1,6 +1,6 @@
 const { Schema, model } = require("mongoose");
 
-const CourseMetaSchema = new Schema({
+const CourseRelationMetaSchema = new Schema({
   studentId: {
     type: Schema.Types.ObjectId,
     ref: "TelegramUser",
@@ -31,4 +31,4 @@ const CourseMetaSchema = new Schema({
   },
 });
 
-module.exports = model("CourseMeta", CourseMetaSchema);
+module.exports = model("CourseRelationMeta", CourseRelationMetaSchema);

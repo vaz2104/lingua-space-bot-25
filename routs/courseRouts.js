@@ -2,13 +2,22 @@ const express = require("express");
 const router = express.Router();
 const CourseController = require("../controllers/CourseController");
 
-router.post("/course", CourseController.create);
-router.post("/course/assign", CourseController.assign);
-router.get("/course", CourseController.getMany);
-router.get("/course/assigned", CourseController.getAssigned);
-router.get("/course/:id", CourseController.getByID);
-router.put("/course", CourseController.update);
-router.put("/course/meta", CourseController.updateMeta);
-router.delete("/course/:id", CourseController.delete);
+router.post("/course", CourseController.CourseCreate);
+router.get("/course", CourseController.CourseGetMany);
+router.get("/course/:id", CourseController.CourseGetSingle);
+router.delete("/course/:id", CourseController.CourseDelete);
+router.put("/course/:id", CourseController.CourseUpdate);
+
+router.post("/course-relation", CourseController.CourseRelationCreate);
+router.get("/course-relation", CourseController.CourseRelationGetMany);
+router.get("/course-relation/:id", CourseController.CourseRelationGetSingle);
+router.delete("/course-relation/:id", CourseController.CourseRelationDelete);
+router.put("/course-relation", CourseController.CourseRelationUpdate);
+
+router.post("/course-relation-meta", CourseController.RelationMetaCreate);
+router.get("/course-relation-meta", CourseController.RelationMetaGetMany);
+router.get("/course-relation-meta/:id", CourseController.RelationMetaGetSingle); // find by relationId ( NOT _id )
+router.delete("/course-relation-meta/:id", CourseController.RelationMetaDelete);
+router.put("/course-relation-meta", CourseController.RelationMetaUpdate);
 
 module.exports = router;
