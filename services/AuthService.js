@@ -28,6 +28,8 @@ class AuthService {
     return authData;
   }
   async login(options) {
+    console.log(options);
+
     if (!options?.username || !options.key) {
       throw new Error("Invalid data was sent"); // 400
     }
@@ -36,6 +38,8 @@ class AuthService {
       options?.username
     );
 
+    console.log("telegramUser", telegramUser);
+
     if (!telegramUser) return null;
 
     const platformUser = await PlatformUser.findOne({
@@ -43,12 +47,15 @@ class AuthService {
       role: options.role,
     });
 
+    console.log("platformUser", platformUser);
+
     if (!platformUser) return null;
 
     const authData = await Auth.findOne({
       telegramUserId: telegramUser._id,
       key: options.key,
     });
+    console.log("platformUser", platformUser);
 
     if (!authData) return null;
 
