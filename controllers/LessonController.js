@@ -1,73 +1,127 @@
 const LessonService = require("../services/LessonService");
 
 class LessonController {
-  async create(req, res) {
+  async LessonCreate(req, res) {
     try {
-      const data = await LessonService.create(req?.body);
+      const data = await LessonService.LessonCreate(req?.body);
       res.json(data);
     } catch (error) {
       res.status(500).json(error.message);
     }
   }
-  async assign(req, res) {
+  async LessonGetMany(req, res) {
     try {
-      const data = await LessonService.assign(req?.body);
+      const data = await LessonService.LessonGetMany(req?.query);
       res.json(data);
     } catch (error) {
       res.status(500).json(error.message);
     }
   }
-  async getByID(req, res) {
+  async LessonGetSingle(req, res) {
     try {
-      const data = await LessonService.getByID(req?.params?.id);
+      const data = await LessonService.LessonGetSingle(req?.params?.id);
       res.json(data);
     } catch (error) {
       res.status(500).json(error.message);
     }
   }
-  async getMany(req, res) {
+  async LessonDelete(req, res) {
     try {
-      const data = await LessonService.getMany(req?.query);
+      const data = await LessonService.LessonDelete(req?.params?.id);
       res.json(data);
     } catch (error) {
       res.status(500).json(error.message);
     }
   }
-  async delete(req, res) {
+  async LessonUpdate(req, res) {
     try {
-      const data = await LessonService.delete(req?.params?.id);
+      const data = await LessonService.LessonUpdate(req?.params?.id, req?.body);
       res.json(data);
     } catch (error) {
       res.status(500).json(error.message);
     }
   }
-  async update(req, res) {
+  async LessonRelationCreate(req, res) {
     try {
-      const data = await LessonService.update(req?.body);
+      const data = await LessonService.LessonRelationCreate(req?.body);
       res.json(data);
     } catch (error) {
       res.status(500).json(error.message);
     }
   }
-  async updateMeta(req, res) {
+  async LessonRelationGetMany(req, res) {
     try {
-      const data = await LessonService.updateMeta(req?.body);
+      const data = await LessonService.LessonRelationGetMany(req?.query);
       res.json(data);
     } catch (error) {
       res.status(500).json(error.message);
     }
   }
-  async getAssigned(req, res) {
+  async LessonRelationGetSingle(req, res) {
     try {
-      const data = await LessonService.getAssigned(req?.query);
+      const data = await LessonService.LessonRelationGetSingle(req?.params?.id);
       res.json(data);
     } catch (error) {
       res.status(500).json(error.message);
     }
   }
-  async getMeta(req, res) {
+  async LessonRelationDelete(req, res) {
     try {
-      const data = await LessonService.getMeta(req?.query);
+      const data = await LessonService.LessonRelationDelete(req?.params?.id);
+      res.json(data);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
+  async LessonRelationUpdate(req, res) {
+    try {
+      const data = await LessonService.LessonRelationUpdate(
+        req?.params?.id,
+        req?.body
+      );
+      res.json(data);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
+  async RelationMetaCreate(req, res) {
+    try {
+      const data = await LessonService.RelationMetaCreate(req?.body);
+      res.json(data);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
+  async RelationMetaGetMany(req, res) {
+    try {
+      const data = await LessonService.RelationMetaGetMany(req?.query);
+      res.json(data);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
+  async RelationMetaGetSingle(req, res) {
+    try {
+      const data = await LessonService.RelationMetaGetSingle(req?.params?.id);
+      res.json(data);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
+  async RelationMetaDelete(req, res) {
+    try {
+      const data = await LessonService.RelationMetaDelete(req?.params?.id);
+      res.json(data);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  }
+  async RelationMetaUpdate(req, res) {
+    try {
+      const data = await LessonService.RelationMetaUpdate(
+        req?.params?.id,
+        req?.body
+      );
       res.json(data);
     } catch (error) {
       res.status(500).json(error.message);
