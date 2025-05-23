@@ -14,10 +14,10 @@ router.get("/lesson-relation/:id", LessonController.LessonRelationGetSingle);
 router.delete("/lesson-relation/:id", LessonController.LessonRelationDelete);
 router.put("/lesson-relation", LessonController.LessonRelationUpdate);
 
-router.post("/relation-meta", LessonController.RelationMetaCreate);
-router.get("/relation-meta", LessonController.RelationMetaGetMany);
-router.get("/relation-meta/:id", LessonController.RelationMetaGetSingle); // find by relationId ( NOT _id )
-router.delete("/relation-meta/:id", LessonController.RelationMetaDelete);
-router.put("/relation-meta", LessonController.RelationMetaUpdate);
+router.post("/lesson-relation-meta", LessonController.RelationMetaCreate);
+router.get("/lesson-relation-meta", LessonController.RelationMetaGetMany);
+router.get("/lesson-relation-meta/:id", LessonController.RelationMetaGetSingle); // find by relationId ( NOT _id )
+router.delete("/lesson-relation-meta/:id", LessonController.RelationMetaDelete);
+router.put("/lesson-relation-meta", LessonController.RelationMetaUpdate);
 
 module.exports = router;
