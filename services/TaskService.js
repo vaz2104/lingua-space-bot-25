@@ -1,102 +1,111 @@
 const Task = require("../models/Task");
 const StudentTaskRelationship = require("../models/StudentTaskRelationship");
-const TaskMeta = require("../models/TaskMeta");
+const TaskRelationMeta = require("../models/TaskRelationMeta");
 
 class TaskService {
-  async create(options) {
-    if (!options?.taskOptions) {
-      throw new Error("Invalid data was sent"); // 400
+  /**
+   * TASK METHODS
+   */
+
+  async TaskCreate(options) {
+    if (!options) {
+      throw new Error("TaskCreate -> Invalid data was sent");
     }
 
-    const newTask = await Task.create(options.taskOptions);
-
-    let newTaskRelations = null;
-    if (
-      newTask?._id &&
-      options.assignToStudent &&
-      options?.performers?.length
-    ) {
-      newTaskRelations = await StudentTaskRelationship.create({
-        taskId: newTask?._id,
-        botId: options?.taskOptions?.botId,
-        adminId: options?.taskOptions?.adminId,
-        groupID: options?.groupID,
-        students: options?.performers,
-      });
+    return await Task.create(options);
+  }
+  async TaskGetMany(options) {
+    if (!options) {
+      throw new Error("TaskGetMany -> Invalid data was sent");
     }
 
-    return [newTask, newTaskRelations] || null;
+    return await Task.find(options).sort([["date", -1]]);
+  }
+  async TaskGetSingle(id) {
+    if (!id) {
+      throw new Error("TaskGetSingle -> Invalid data was sent");
+    }
+
+    return await Task.findById(id);
+  }
+  async TaskDelete(id) {
+    if (!id) {
+      throw new Error("TaskDelete -> Invalid data was sent");
+    }
+
+    return await Task.findByIdAndDelete(id);
+  }
+  async TaskUpdate(id, options) {
+    if (!id || !options) {
+      throw new Error("TaskUpdate -> Invalid data was sent");
+    }
+
+    return await Task.findByIdAndUpdate(id, options, {
+      new: true,
+    });
   }
 
-  async assign(options) {
+  /**
+   * TASK RELATION METHODS
+   */
+
+  async TaskRelationCreate(options) {
     if (!options) {
-      throw new Error("Invalid data was sent"); // 400
+      throw new Error("TaskRelationCreate -> Invalid data was sent");
     }
 
-    const newTaskRelation = await StudentTaskRelationship.create(options);
-    let taskMeta = [];
+    // {
+    //   taskId: _id,
+    //   botId: taskOptions?.botId,
+    //   adminId: taskOptions?.adminId,
+    //   groupID: groupID,
+    //   students: performers,
+    // }
 
-    Promise.all(
-      options?.students.map(async (studentId) => {
-        const newMeta = await TaskMeta.create({
-          studentId,
-          relationId: newTaskRelation?._id,
-        });
-        taskMeta.push(newMeta);
-      })
-    ).then(() => {
-      console.log("Task Meta Created");
-    });
+    const newTaskRelation = await StudentTaskRelationship.create(options);
+
+    if (newTaskRelation?.students && newTaskRelation?.students?.length) {
+      await Promise.all(
+        newTaskRelation?.students.map(async (studentId) => {
+          await this.RelationMetaCreate({
+            studentId,
+            relationId: newTaskRelation?._id,
+          });
+        })
+      ).then(() => {
+        console.log("RelationMetaCreate finished");
+      });
+    }
 
     return newTaskRelation;
   }
 
-  async getByBotId(botId, adminId) {
-    if (!botId || !adminId) {
-      throw new Error("Invalid data was sent"); // 400
-    }
-
-    return await Task.find({ botId, adminId });
-  }
-  async getAssigned(options) {
+  async TaskRelationGetMany(options) {
     if (!options) {
-      throw new Error("Invalid data was sent"); // 400
+      throw new Error("TaskRelationGetMany -> Invalid data was sent");
     }
 
     const tasks = [];
-    const relations = await StudentTaskRelationship.find(options).populate([
-      "taskId",
-      "groupID",
-      "students",
-    ]);
+    const relations = await StudentTaskRelationship.find(options)
+      .populate(["taskId", "groupID", "students"])
+      .sort([["timestamp", -1]]);
 
-    if (!relations) return [];
+    if (!relations) return null;
 
     await Promise.all(
       relations.map(async (relation) => {
-        const meta = await TaskMeta.findOne({ relationId: relation?._id });
+        const meta = await this.RelationMetaGetSingle(relation?._id);
         tasks.push({ ...relation?._doc, meta });
       })
     ).then(() => {
-      console.log("Task Meta Created");
+      console.log("RelationMetaGetSingle selected");
     });
 
     return tasks;
   }
-
-  async getTaskByID(id) {
+  async TaskRelationGetSingle(id) {
     if (!id) {
-      throw new Error("Invalid data was sent"); // 400
-    }
-
-    const task = await Task.findById(id);
-
-    return task;
-  }
-
-  async getTaskRelationByID(id) {
-    if (!id) {
-      throw new Error("Invalid data was sent"); // 400
+      throw new Error("TaskRelationGetSingle -> Invalid data was sent");
     }
 
     const relation = await StudentTaskRelationship.findById(id).populate([
@@ -107,86 +116,67 @@ class TaskService {
 
     if (!relation?._id) return null;
 
-    const meta = await TaskMeta.findOne({ relationId: relation?._id });
+    const meta = await this.RelationMetaGetSingle(relation?._id);
 
     return { ...relation?._doc, meta };
   }
-  async delete(id) {
+  async TaskRelationDelete(id) {
     if (!id) {
-      throw new Error("Invalid data was sent"); // 400
+      throw new Error("TaskRelationDelete -> Invalid data was sent");
     }
 
     return await StudentTaskRelationship.findByIdAndDelete(id);
   }
-
-  async update(options) {
-    if (!options) {
-      throw new Error("Invalid data was sent"); // 400
-    }
-    let updatedTask = null;
-    if (options?.taskId && options?.taskOptions) {
-      updatedTask = await Task.findByIdAndUpdate(
-        options?.taskId,
-        options.taskOptions,
-        {
-          new: true,
-        }
-      );
+  async TaskRelationUpdate(id, options) {
+    if (!id || !options) {
+      throw new Error("TaskRelationUpdate -> Invalid data was sent");
     }
 
-    let updatedTaskRelations = null;
-    let taskMeta = [];
-
-    if (options?.relationId && options?.relationOptions) {
-      updatedTaskRelations = await StudentTaskRelationship.findByIdAndUpdate(
-        options?.relationId,
-        options?.relationOptions,
-        {
-          new: true,
-        }
-      );
-    }
-
-    return [updatedTask, updatedTaskRelations, taskMeta] || null;
+    return await StudentTaskRelationship.findByIdAndUpdate(id, options, {
+      new: true,
+    });
   }
 
-  async updateTaskMeta(options) {
+  /**
+   * TASK RELATION META METHODS
+   */
+
+  async RelationMetaCreate(options) {
     if (!options) {
-      throw new Error("Invalid data was sent"); // 400
+      throw new Error("RelationMetaCreate -> Invalid data was sent");
     }
 
-    // const { studentId, taskId, meta, status } = options;
-
-    if (!options?.metaId || !options?.metaOptions) {
-      return null;
-    }
-
-    return await TaskMeta.findByIdAndUpdate(
-      options?.metaId,
-      options?.metaOptions,
-      {
-        new: true,
-      }
-    );
+    return await TaskRelationMeta.create(options);
   }
-
-  async getSavedByBotID(options) {
-    // console.log(options);
-
+  async RelationMetaGetMany(options) {
     if (!options) {
-      throw new Error("Invalid data was sent"); // 400
+      throw new Error("RelationMetaGetMany -> Invalid data was sent");
     }
 
-    return await Task.find(options).sort([["date", -1]]);
+    return await TaskRelationMeta.find(options).sort([["timestamp", -1]]);
   }
-  async getTaskMeta(options) {
-    // console.log("getTaskMeta", options);
-
-    if (!options) {
-      throw new Error("Invalid data was sent"); // 400
+  async RelationMetaGetSingle(id) {
+    if (!id) {
+      throw new Error("RelationMetaGetSingle -> Invalid data was sent");
     }
 
-    return await TaskMeta.findOne(options);
+    return await TaskRelationMeta.findOne({ relationId: id });
+  }
+  async RelationMetaDelete(id) {
+    if (!id) {
+      throw new Error("RelationMetaDelete -> Invalid data was sent");
+    }
+
+    return await TaskRelationMeta.findByIdAndDelete(id);
+  }
+  async RelationMetaUpdate(id, options) {
+    if (!id || !options) {
+      throw new Error("RelationMetaUpdate -> Invalid data was sent");
+    }
+
+    return await TaskRelationMeta.findByIdAndUpdate(id, options, {
+      new: true,
+    });
   }
 }
 
