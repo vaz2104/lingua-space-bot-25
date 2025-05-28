@@ -34,7 +34,7 @@ const StudentLessonRelationshipSchema = new Schema({
     type: String,
     default: "published", // inactive | finished
   },
-  dateStart: {
+  createdAt: {
     type: Date,
     default: new Date(dateUkrainTZ),
   },

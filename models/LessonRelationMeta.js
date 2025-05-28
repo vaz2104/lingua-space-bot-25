@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const dateUkrainTZ = require("../lib/getCurrentDateUkrainTimeZone");
 
 const LessonRelationMetaSchema = new Schema({
   studentId: {
@@ -21,9 +22,9 @@ const LessonRelationMetaSchema = new Schema({
     type: String, //
     default: "inactive", // active | finished
   },
-  dateStart: {
+  createdAt: {
     type: Date,
-    // default: new Date(dateUkrainTZ),
+    default: new Date(dateUkrainTZ),
   },
   timestamp: {
     type: Number,

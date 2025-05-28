@@ -12,6 +12,9 @@ class CourseService {
       throw new Error("CourseCreate -> Invalid data was sent");
     }
 
+    options.createdAt = `${formatDate(new Date())}T00:00:00.000Z`;
+    options.timestamp = Date.now();
+
     return await Course.create(options);
   }
   async CourseGetMany(options) {
@@ -55,6 +58,9 @@ class CourseService {
     if (!options) {
       throw new Error("CourseRelationCreate -> Invalid data was sent");
     }
+
+    options.createdAt = `${formatDate(new Date())}T00:00:00.000Z`;
+    options.timestamp = Date.now();
 
     const newCourseRelation = await StudentCourseRelationship.create(options);
 
@@ -154,6 +160,9 @@ class CourseService {
     if (!options) {
       throw new Error("RelationMetaCreate -> Invalid data was sent");
     }
+
+    options.createdAt = `${formatDate(new Date())}T00:00:00.000Z`;
+    options.timestamp = Date.now();
 
     return await CourseRelationMeta.create(options);
   }

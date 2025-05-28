@@ -10,6 +10,10 @@ const LessonSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Bot",
   },
+  level: {
+    type: String,
+    default: "",
+  },
   title: {
     type: String,
     default: "",

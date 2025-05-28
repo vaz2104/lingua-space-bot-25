@@ -30,7 +30,7 @@ const StudentTaskRelationshipSchema = new Schema({
     type: String,
     default: "", // single | lesson
   },
-  dateStart: {
+  createdAt: {
     type: Date,
     default: new Date(dateUkrainTZ),
   },

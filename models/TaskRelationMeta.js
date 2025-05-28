@@ -22,9 +22,9 @@ const TaskRelationMetaSchema = new Schema({
     type: String, //
     default: "inactive", // active | finished
   },
-  dateStart: {
+  createdAt: {
     type: Date,
-    // default: new Date(dateUkrainTZ),
+    default: new Date(dateUkrainTZ),
   },
   timestamp: {
     type: Number,

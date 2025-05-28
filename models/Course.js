@@ -14,6 +14,10 @@ const CourseSchema = new Schema({
     type: [Schema.Types.ObjectId],
     ref: "Lesson",
   },
+  level: {
+    type: String,
+    default: "",
+  },
   title: {
     type: String,
     default: "",

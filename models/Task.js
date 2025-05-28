@@ -10,6 +10,10 @@ const TaskSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Bot",
   },
+  level: {
+    type: String,
+    default: "",
+  },
   matherialType: {
     type: String,
     default: "",

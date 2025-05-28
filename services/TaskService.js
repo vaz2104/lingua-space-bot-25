@@ -1,6 +1,7 @@
 const Task = require("../models/Task");
 const StudentTaskRelationship = require("../models/StudentTaskRelationship");
 const TaskRelationMeta = require("../models/TaskRelationMeta");
+const formatDate = require("../lib/formatDate");
 
 class TaskService {
   /**
@@ -9,6 +10,9 @@ class TaskService {
 
   async TaskCreate(options) {
     if (!options) {
+      options.createdAt = `${formatDate(new Date())}T00:00:00.000Z`;
+      options.timestamp = Date.now();
+
       throw new Error("TaskCreate -> Invalid data was sent");
     }
 
@@ -54,13 +58,8 @@ class TaskService {
       throw new Error("TaskRelationCreate -> Invalid data was sent");
     }
 
-    // {
-    //   taskId: _id,
-    //   botId: taskOptions?.botId,
-    //   adminId: taskOptions?.adminId,
-    //   groupID: groupID,
-    //   students: performers,
-    // }
+    options.createdAt = `${formatDate(new Date())}T00:00:00.000Z`;
+    options.timestamp = Date.now();
 
     const newTaskRelation = await StudentTaskRelationship.create(options);
 
@@ -86,6 +85,7 @@ class TaskService {
     }
 
     const tasks = [];
+
     const relations = await StudentTaskRelationship.find(options)
       .populate(["taskId", "groupID", "students"])
       .sort([["timestamp", -1]]);
@@ -145,6 +145,9 @@ class TaskService {
     if (!options) {
       throw new Error("RelationMetaCreate -> Invalid data was sent");
     }
+
+    options.createdAt = `${formatDate(new Date())}T00:00:00.000Z`;
+    options.timestamp = Date.now();
 
     return await TaskRelationMeta.create(options);
   }
