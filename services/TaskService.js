@@ -23,7 +23,7 @@ class TaskService {
       throw new Error("TaskGetMany -> Invalid data was sent");
     }
 
-    return await Task.find(options).sort([["date", -1]]);
+    return await Task.find(options).sort([["timestamp", -1]]);
   }
   async TaskGetSingle(id) {
     if (!id) {
@@ -94,7 +94,16 @@ class TaskService {
 
     await Promise.all(
       relations.map(async (relation) => {
-        const meta = await this.RelationMetaGetSingle(relation?._id);
+        let metaQuery = {
+          relationId: relation?._id,
+        };
+
+        if (options.students) {
+          metaQuery.studentId = options.students;
+        }
+
+        const meta = await this.RelationMetaGetMany(metaQuery);
+
         tasks.push({ ...relation?._doc, meta });
       })
     ).then(() => {
@@ -116,7 +125,9 @@ class TaskService {
 
     if (!relation?._id) return null;
 
-    const meta = await this.RelationMetaGetSingle(relation?._id);
+    const meta = await this.RelationMetaGetMany({
+      relationId: relation?._id,
+    });
 
     return { ...relation?._doc, meta };
   }

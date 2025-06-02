@@ -1,3 +1,4 @@
+const formatDate = require("../lib/formatDate");
 const Lesson = require("../models/Lesson");
 const LessonRelationMeta = require("../models/LessonRelationMeta");
 const StudentLessonRelationship = require("../models/StudentLessonRelationship");
@@ -103,7 +104,12 @@ class LessonService {
 
     await Promise.all(
       relations.map(async (relation) => {
-        const meta = await this.RelationMetaGetSingle(relation?._id);
+        let relationQuery = {
+          lessonRelationId: relation?._id,
+        };
+        if (options?.students) relationQuery.studentId = options?.students;
+        const meta = await this.RelationMetaGetMany(relationQuery);
+
         lessons.push({ ...relation?._doc, meta });
       })
     ).then(() => {
@@ -131,7 +137,9 @@ class LessonService {
 
     if (!relation?._id) return null;
 
-    const meta = await this.RelationMetaGetSingle(relation?._id);
+    const meta = await this.RelationMetaGetMany({
+      lessonRelationId: relation?._id,
+    });
 
     return { ...relation?._doc, meta };
   }
