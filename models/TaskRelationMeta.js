@@ -22,6 +22,10 @@ const TaskRelationMetaSchema = new Schema({
     type: String, //
     default: "inactive", // active | finished
   },
+  type: {
+    type: String,
+    default: "", // single | lesson
+  },
   createdAt: {
     type: Date,
     default: new Date(dateUkrainTZ),

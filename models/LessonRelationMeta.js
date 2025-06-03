@@ -22,6 +22,10 @@ const LessonRelationMetaSchema = new Schema({
     type: String, //
     default: "inactive", // active | finished
   },
+  type: {
+    type: String,
+    default: "", // single | course
+  },
   createdAt: {
     type: Date,
     default: new Date(dateUkrainTZ),

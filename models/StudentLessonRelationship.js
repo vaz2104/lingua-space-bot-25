@@ -22,7 +22,7 @@ const StudentLessonRelationshipSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Lesson",
   },
-  lessonType: {
+  type: {
     type: String,
     default: "", // single | course
   },

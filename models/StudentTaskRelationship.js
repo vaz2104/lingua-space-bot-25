@@ -26,7 +26,7 @@ const StudentTaskRelationshipSchema = new Schema({
     type: String,
     default: "published", // inactive | finished
   },
-  taskType: {
+  type: {
     type: String,
     default: "", // single | lesson
   },
