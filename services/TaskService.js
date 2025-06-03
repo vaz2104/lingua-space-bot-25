@@ -69,6 +69,7 @@ class TaskService {
           await this.RelationMetaCreate({
             studentId,
             relationId: newTaskRelation?._id,
+            type: options?.type,
           });
         })
       ).then(() => {

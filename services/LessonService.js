@@ -71,6 +71,7 @@ class LessonService {
           await this.RelationMetaCreate({
             studentId,
             lessonRelationId: newLessonRelation?._id,
+            type: options?.type,
           });
         })
       ).then(() => {
