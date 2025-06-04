@@ -2,6 +2,10 @@ const { Schema, model } = require("mongoose");
 const dateUkrainTZ = require("../lib/getCurrentDateUkrainTimeZone");
 
 const TaskRelationMetaSchema = new Schema({
+  botId: {
+    type: Schema.Types.ObjectId,
+    ref: "Bot",
+  },
   studentId: {
     type: Schema.Types.ObjectId,
     ref: "TelegramUser",

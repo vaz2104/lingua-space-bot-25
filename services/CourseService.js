@@ -69,6 +69,7 @@ class CourseService {
       await Promise.all(
         newCourseRelation?.students.map(async (studentId) => {
           await this.RelationMetaCreate({
+            botId: options?.botId,
             studentId,
             courseRelationId: newCourseRelation?._id,
           });
@@ -179,14 +180,35 @@ class CourseService {
       throw new Error("RelationMetaGetMany -> Invalid data was sent");
     }
 
-    return await CourseRelationMeta.find(options).sort([["timestamp", -1]]);
+    return await CourseRelationMeta.find(options)
+      .populate(["courseRelationId", "studentId"])
+      .populate({
+        path: "courseRelationId",
+        populate: [
+          {
+            path: "courseId",
+            model: "Course",
+          },
+        ],
+      })
+      .sort([["timestamp", -1]]);
   }
   async RelationMetaGetSingle(id) {
     if (!id) {
       throw new Error("RelationMetaGetSingle -> Invalid data was sent");
     }
 
-    return await CourseRelationMeta.findOne({ courseRelationId: id });
+    return await CourseRelationMeta.findById(id)
+      .populate(["courseRelationId", "studentId"])
+      .populate({
+        path: "courseRelationId",
+        populate: [
+          {
+            path: "courseId",
+            model: "Course",
+          },
+        ],
+      });
   }
   async RelationMetaDelete(id) {
     if (!id) {
