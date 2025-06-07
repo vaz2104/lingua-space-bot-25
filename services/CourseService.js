@@ -180,6 +180,13 @@ class CourseService {
       throw new Error("RelationMetaGetMany -> Invalid data was sent");
     }
 
+    if (options?.status) {
+      const statusArr = options?.status.split(",");
+      if (statusArr?.length) {
+        options.status = { $in: statusArr };
+      }
+    }
+
     return await CourseRelationMeta.find(options)
       .populate(["courseRelationId", "studentId"])
       .populate({

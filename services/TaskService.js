@@ -169,6 +169,13 @@ class TaskService {
       throw new Error("RelationMetaGetMany -> Invalid data was sent");
     }
 
+    if (options?.status) {
+      const statusArr = options?.status.split(",");
+      if (statusArr?.length) {
+        options.status = { $in: statusArr };
+      }
+    }
+
     return await TaskRelationMeta.find(options)
       .populate(["relationId", "studentId"])
       .populate({
