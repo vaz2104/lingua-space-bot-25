@@ -195,6 +195,12 @@ class CourseService {
           {
             path: "courseId",
             model: "Course",
+            populate: [
+              {
+                path: "selectedLessons",
+                model: "Lesson",
+              },
+            ],
           },
         ],
       })
@@ -213,9 +219,24 @@ class CourseService {
           {
             path: "courseId",
             model: "Course",
+            populate: [
+              {
+                path: "selectedLessons",
+                model: "Lesson",
+              },
+            ],
           },
         ],
       });
+    // .populate({
+    //   path: "courseId",
+    //   populate: [
+    //     {
+    //       path: "selectedLessons",
+    //       model: "Lesson",
+    //     },
+    //   ],
+    // });
   }
   async RelationMetaDelete(id) {
     if (!id) {
