@@ -12,6 +12,9 @@ query queryPhrasebooksBySlug($id: ID!) {
       }
       sentenceSetOptions {
         sentenceSetOptions {
+          image {
+            mediaItemUrl
+          }
           sentences {
             ... on Sentence {
               databaseId
