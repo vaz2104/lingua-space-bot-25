@@ -23,6 +23,7 @@ query queryWordSetBySlug($id: ID!) {
               wordOptions {
                 uaTranslation
                 transcription
+                interpretation
                 soundfile {
                   mediaItemUrl
                 }

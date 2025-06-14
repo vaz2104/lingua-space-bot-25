@@ -6,6 +6,7 @@ module.exports = `
                     wordOptions {
                         uaTranslation
                         transcription
+                        interpretation
                         soundfile {
                             mediaItemUrl
                         }

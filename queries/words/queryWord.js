@@ -7,6 +7,7 @@ module.exports = `
                     sound
                     uaTranslation
                     ruTranslation
+                    interpretation
                     image
                     transcription
                     soundfile {
@@ -22,4 +23,4 @@ module.exports = `
         }
     }
   
-`
+`;
