@@ -25,7 +25,11 @@ class StudentService {
 
   async getOne(options) {
     const search = options?.username ? options : {};
+    console.log("options", options);
+
     const telegramUser = await TelegramUser.findOne(search, ["_id"]);
+
+    console.log("telegramUser", telegramUser);
 
     if (!telegramUser?._id) return null;
 
