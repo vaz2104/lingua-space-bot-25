@@ -1,5 +1,6 @@
 const { Schema, model } = require("mongoose");
 const dateUkrainTZ = require("../lib/getCurrentDateUkrainTimeZone");
+const Group = require("./Group");
 
 const StudentTaskRelationshipSchema = new Schema({
   botId: {
@@ -12,7 +13,7 @@ const StudentTaskRelationshipSchema = new Schema({
   },
   groupID: {
     type: Schema.Types.ObjectId,
-    ref: "Group",
+    ref: Group,
   },
   students: {
     type: [Schema.Types.ObjectId],
