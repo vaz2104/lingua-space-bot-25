@@ -19,6 +19,7 @@ const textRouts = require("./routs/textRouts");
 const taskRouts = require("./routs/taskRouts");
 const lessonRouts = require("./routs/lessonRouts");
 const courseRouts = require("./routs/courseRouts");
+const telegramRouts = require("./routs/telegramRouts");
 
 const thirdPartyAPIRouts = require("./routs/thirdPartyAPIRouts");
 
@@ -90,6 +91,7 @@ app.use("/api", textRouts);
 app.use("/api", taskRouts);
 app.use("/api", lessonRouts);
 app.use("/api", courseRouts);
+app.use("/api", telegramRouts);
 
 app.use("/api", thirdPartyAPIRouts);
 
