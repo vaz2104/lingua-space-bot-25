@@ -22,9 +22,13 @@ class TelegramService {
     if (!newBot) return null;
 
     // const groupID = "-1001977206005";
-    await PanelCallbacks.postTask(newBot, groupID, options, bot);
+    const res = await PanelCallbacks.postTask(newBot, groupID, options, bot);
 
-    return options || [];
+    if (res.status === false) {
+      return null;
+    }
+
+    return res;
   }
 }
 
